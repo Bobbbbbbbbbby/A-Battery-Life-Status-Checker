@@ -54,7 +54,7 @@ int main()
             min_count++;
             avg_time_left -= 60;
         }
-        printf("\r                                    \r");
+        system("clear");
         printf("%d : %d Remaining", hr_count, min_count);
     }
     return 0;
