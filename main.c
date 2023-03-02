@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #define FULL_ENERGY_PATH \
     "/sys/class/power_supply/BAT0/energy_full"
@@ -10,6 +11,8 @@
 
 #define NOW_STATUS \
     "/sys/class/power_supply/BAT0/status"
+
+#define TIME_GAP 20
 
 int get_energy_full();
 int get_energy_now();
@@ -23,16 +26,19 @@ int get_battery_status();
 int main()
 {
     setvbuf(stdout, NULL, _IONBF, 0);
+    // hide cursor
+    system("echo -e \"\\033[?25l\"");
+    system("clear");
     printf("Start calculating battery life!");
     int energy_start = get_energy_now();
     int time = 0;
     while(1)
     {
-        sleep(10);
+        sleep(TIME_GAP);
         int status_now = get_battery_status();
         int energy_now = get_energy_now();
         int energy_consumption = energy_start - energy_now;
-        time += 10;
+        time += TIME_GAP;
         double avg_spd = (double)energy_consumption / (double)time;
 
         double avg_time_left = (double)energy_now / avg_spd;
